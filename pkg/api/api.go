@@ -15,7 +15,9 @@ type API struct {
 }
 
 type Server struct {
-	address string
+	address     string
+	certificate string
+	key         string
 }
 
 func New(cfg config.Config) (*API, error) {
@@ -35,16 +37,18 @@ func New(cfg config.Config) (*API, error) {
 		router: router,
 		db:     s,
 		Server: Server{
-			address: fmt.Sprintf("%s:%s", cfg.Host, cfg.Port),
+			address:     fmt.Sprintf("%s:%s", cfg.Host, cfg.Port),
+			certificate: cfg.CertFile,
+			key:         cfg.KeyFile,
 		},
 	}, nil
 }
 
 func (api *API) Fill() {
 	// TODO: api.router.HandleFunc("api/...", <handler>).Methods(http.MethodGet, ... )
-	api.router.HandleFunc("/api/ping", api.PingHandler).Methods(http.MethodGet)
+	api.router.HandleFunc("/ping", api.PingHandler).Methods(http.MethodGet)
 }
 
 func (api *API) Serve() error {
-	return http.ListenAndServe(api.address, api.router)
+	return http.ListenAndServeTLS(api.address, api.certificate, api.key, api.router)
 }

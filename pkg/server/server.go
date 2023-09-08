@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"webEngineering/pkg/api"
 	"webEngineering/pkg/config"
 )
@@ -16,6 +15,5 @@ func Start() error {
 	}
 
 	apiKeeper.Fill()
-	fmt.Println("Filled and ready to serve", cfg)
 	return apiKeeper.Serve()
 }

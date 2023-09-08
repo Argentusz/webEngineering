@@ -10,13 +10,14 @@ func (api *API) PingHandler(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		str := r.URL.Query().Get("str")
 		if str == "" {
-			err := json.NewEncoder(w).Encode("ping")
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-			}
+			w.WriteHeader(http.StatusOK)
 			return
 		}
-
+		http.SetCookie(w, &http.Cookie{
+			Name:   "str",
+			Value:  str,
+			MaxAge: 20,
+		})
 		err := json.NewEncoder(w).Encode(str)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
