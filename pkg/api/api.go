@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -45,8 +46,20 @@ func New(cfg config.Config) (*API, error) {
 }
 
 func (api *API) Fill() {
-	// TODO: api.router.HandleFunc("api/...", <handler>).Methods(http.MethodGet, ... )
+	// TODO: api.router.HandleFunc("/api/...", <handler>).Methods(http.MethodGet, ... )
+	api.router.Use(api.Middleware)
 	api.router.HandleFunc("/ping", api.PingHandler).Methods(http.MethodGet)
+	api.router.HandleFunc("/api/test", func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			idString := r.URL.Query().Get("id")
+			err := json.NewEncoder(w).Encode(idString)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+		}
+	}).Methods(http.MethodGet)
 }
 
 func (api *API) Serve() error {
