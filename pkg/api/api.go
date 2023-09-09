@@ -46,9 +46,9 @@ func New(cfg config.Config) (*API, error) {
 }
 
 func (api *API) Fill() {
-	// TODO: api.router.HandleFunc("/api/...", <handler>).Methods(http.MethodGet, ... )
 	api.router.Use(api.Middleware)
 	api.router.HandleFunc("/ping", api.PingHandler).Methods(http.MethodGet)
+	api.router.HandleFunc("/auth", api.AuthHandler).Methods(http.MethodGet, http.MethodPost)
 	api.router.HandleFunc("/api/test", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:

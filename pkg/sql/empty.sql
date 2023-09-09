@@ -1,18 +1,18 @@
 CREATE TABLE IF NOT EXISTS universities (
-    id       INTEGER PRIMARY KEY,
+    id       SERIAL PRIMARY KEY,
     name     TEXT NOT NULL DEFAULT '',
     login    TEXT NOT NULL DEFAULT '',
     password TEXT NOT NULL DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS courses (
-    id           INTEGER PRIMARY KEY,
+    id           SERIAL PRIMARY KEY,
     universityID INTEGER REFERENCES universities(id),
     name         TEXT NOT NULL DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS students (
-    id   INTEGER PRIMARY KEY,
+    id   SERIAL PRIMARY KEY,
     name TEXT NOT NULL DEFAULT ''
 );
 
