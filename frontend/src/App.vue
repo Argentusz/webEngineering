@@ -1,28 +1,30 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <mt-header/>
+    <router-view class="routerView"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import MtHeader from "@/components/mtHeader.vue";
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  components: {MtHeader},
 }
 </script>
 
-<style>
+<style lang="scss">
+@import '@/helpers/variables.scss';
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: white;
+}
+.routerView {
+  max-height: calc(100vh - $mtHeaderHeight);
 }
 </style>

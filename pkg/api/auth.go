@@ -20,12 +20,16 @@ func (api *API) AuthHandler(w http.ResponseWriter, r *http.Request) {
 			unauthorized(w)
 			return
 		}
-		userID, err := api.db.GetID(login)
+		university, err := api.db.GetUniversityByLogin(login)
 		if err != nil {
 			unauthorized(w)
 			return
 		}
-		err = json.NewEncoder(w).Encode(userID)
+		http.SetCookie(w, &http.Cookie{
+			Name:  "lang",
+			Value: university.Lang,
+		})
+		err = json.NewEncoder(w).Encode(university.ID)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -41,7 +45,7 @@ func (api *API) AuthHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// Check if user with this login already exists
-		_, err = api.db.GetID(university.Login)
+		_, err = api.db.GetUniversityByLogin(university.Login)
 		if err == nil {
 			unauthorized(w)
 			return

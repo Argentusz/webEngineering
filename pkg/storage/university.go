@@ -13,11 +13,12 @@ func (s *Storage) GetPassword(login string) (string, error) {
 	return password, err
 }
 
-func (s *Storage) GetID(login string) (int, error) {
-	var id int
+func (s *Storage) GetUniversityByLogin(login string) (models.University, error) {
+	var university models.University
 	err := s.pool.QueryRow(context.Background(),
-		`SELECT id FROM universities WHERE login = $1`, login).Scan(&id)
-	return id, err
+		`SELECT id, name, login, password, lang FROM universities WHERE login = $1`, login).
+		Scan(&university.ID, university.Name, university.Login, university.Password, university.Lang)
+	return university, err
 }
 
 func (s *Storage) GetUniversity(id int) (models.University, error) {
