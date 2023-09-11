@@ -51,6 +51,7 @@ func (api *API) Fill() {
 	api.router.HandleFunc("/auth", api.AuthHandler).Methods(http.MethodGet, http.MethodPost)
 	api.router.HandleFunc("/api/students", api.StudentsHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete)
 	api.router.HandleFunc("/api/faculties", api.FacultiesHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete)
+	api.router.HandleFunc("/api/faculties_to_students", api.FacultiesToStudents).Methods(http.MethodGet, http.MethodPost, http.MethodDelete)
 	api.router.HandleFunc("/api/test", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:

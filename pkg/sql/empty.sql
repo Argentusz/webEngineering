@@ -9,12 +9,15 @@ CREATE TABLE IF NOT EXISTS universities (
 CREATE TABLE IF NOT EXISTS faculties (
     id           SERIAL PRIMARY KEY,
     universityID INTEGER REFERENCES universities(id),
-    name         TEXT NOT NULL DEFAULT ''
+    name         TEXT NOT NULL DEFAULT '',
+    exam_date    TEXT NOT NULL DEFAULT '',
+    exam_aud     TEXT NOT NULL DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS students (
     id   SERIAL PRIMARY KEY,
-    name TEXT NOT NULL DEFAULT ''
+    name TEXT NOT NULL DEFAULT '',
+    exam INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS faculties_to_students (

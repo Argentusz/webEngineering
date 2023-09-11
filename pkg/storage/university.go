@@ -20,6 +20,14 @@ func (s *Storage) GetID(login string) (int, error) {
 	return id, err
 }
 
+func (s *Storage) GetUniversity(id int) (models.University, error) {
+	var university models.University
+	err := s.pool.QueryRow(context.Background(),
+		`SELECT (id, name, login, password, lang) FROM universities WHERE id = $1`, id).
+		Scan(&university.ID, &university.Name, &university.Login, &university.Password, &university.Lang)
+	return university, err
+}
+
 func (s *Storage) NewUniversity(university models.University) (int, error) {
 	var id int
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(university.Password), 10)

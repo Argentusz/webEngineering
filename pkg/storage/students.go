@@ -8,14 +8,15 @@ import (
 func (s *Storage) GetStudent(id int) (models.Student, error) {
 	var student models.Student
 	err := s.pool.QueryRow(context.Background(),
-		`SELECT id, name FROM students WHERE id = $1`, id).Scan(&student.ID, &student.Name)
+		`SELECT id, name, exam FROM students WHERE id = $1`, id).
+		Scan(&student.ID, &student.Name, &student.Exam)
 	return student, err
 }
 
 func (s *Storage) GetAllStudents() ([]models.Student, error) {
 	var res []models.Student
 	rows, err := s.pool.Query(context.Background(),
-		`SELECT id, name FROM students`)
+		`SELECT id, name, exam FROM students`)
 	if err != nil {
 		return nil, err
 	}
@@ -23,7 +24,7 @@ func (s *Storage) GetAllStudents() ([]models.Student, error) {
 
 	for rows.Next() {
 		var student models.Student
-		err = rows.Scan(&student.ID, &student.Name)
+		err = rows.Scan(&student.ID, &student.Name, &student.Exam)
 		if err != nil {
 			return nil, err
 		}
@@ -35,13 +36,13 @@ func (s *Storage) GetAllStudents() ([]models.Student, error) {
 func (s *Storage) PostStudent(student models.Student) (int, error) {
 	var id int
 	err := s.pool.QueryRow(context.Background(),
-		`INSERT INTO students(name) VALUES ($1) RETURNING id`, student.Name).Scan(&id)
+		`INSERT INTO students(name, exam) VALUES ($1, $2) RETURNING id`, student.Name, student.Exam).Scan(&id)
 	return id, err
 }
 
 func (s *Storage) PatchStudent(student models.Student) error {
 	_, err := s.pool.Query(context.Background(),
-		`UPDATE students SET name = $2 WHERE id = $1`, student.ID, student.Name)
+		`UPDATE students SET name = $2, exam = $3 WHERE id = $1`, student.ID, student.Name, student.Exam)
 	return err
 }
 

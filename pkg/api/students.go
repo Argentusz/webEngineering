@@ -25,6 +25,10 @@ func (api *API) StudentsHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		} else {
 			id, err := strconv.Atoi(idStr)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
 			student, err := api.db.GetStudent(id)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
