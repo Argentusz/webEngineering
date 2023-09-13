@@ -26,7 +26,6 @@
 
 <script>
 import {url} from "@/main";
-import axios from "axios";
 
 export default {
   name: "SignIn",
@@ -38,20 +37,24 @@ export default {
       }
     }
   },
+  created() {
+    if (this.checkLoggedIn()) {
+      this.$router.push("/").catch(() => {})
+    }
+  },
   methods: {
     signInHandler() {
       const base64auth = btoa(`${this.user.Login}:${this.user.Password}`)
-      const auth = axios.create({
-        headers: {
-          Authorization: `Basic ${base64auth}`
-        }
-      })
-      auth.get(url + "/auth")
-          .then(data => {
-            console.log("data", data)
+      this.$http.get(url + "/auth", {headers: {Authorization: `Basic ${base64auth}`}})
+          .then(r => {
+            localStorage.setItem("uid", r.data.ID)
+            localStorage.setItem("login", r.data.Login)
+            localStorage.setItem("password", this.user.Password)
+            localStorage.setItem("name", r.data.Name)
+            this.$router.push("/").catch(() => {})
           })
           .catch(err => {
-            console.log("err", err)
+            console.log(err)
           })
     }
   }
@@ -59,7 +62,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/helpers/variables.scss";
+
 
 .signIn {
   display: flex;

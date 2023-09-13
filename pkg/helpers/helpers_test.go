@@ -57,4 +57,11 @@ func TestCheckForSpecialSymbols(t *testing.T) {
 	if res != expect {
 		t.Errorf("str=\"%s\" expected=%t got=%t", str, expect, res)
 	}
+
+	str = "Имя Кого то"
+	res = checkForSpecialSymbols(str, true)
+	expect = true
+	if res != expect {
+		t.Errorf("str=\"%s\" expected=%t got=%t", str, expect, res)
+	}
 }

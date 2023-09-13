@@ -10,6 +10,7 @@ type Config struct {
 	DbPass   string
 	CertFile string
 	KeyFile  string
+	FrontEnd string
 }
 
 func (cfg *Config) Setup() {
@@ -22,4 +23,5 @@ func (cfg *Config) Setup() {
 	cfg.DbPass = "password"
 	cfg.CertFile = "localhost.crt"
 	cfg.KeyFile = "localhost.key"
+	cfg.FrontEnd = "frontend/dist"
 }

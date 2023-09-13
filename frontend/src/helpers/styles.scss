@@ -1,0 +1,40 @@
+@import "variables";
+
+.grid {
+  margin-top: 15px;
+  text-align: left;
+  width: 100%;
+  height: calc(100vh - $mtHeaderHeight - 100px);
+  @media screen and (max-width: 900px) {
+    height: calc(100vh - $mtHeaderHeight - 150px);
+  }
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.grid-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.text-sm {
+  font-size: 12px;
+}
+
+.ag-theme-balham-dark {
+  --ag-balham-active-color: rgba(255, 193, 7, 0.5);
+  --ag-selected-row-background-color: rgba(255, 193, 7, 0.8);
+}
+
+.actions-btn {
+  height: 32px;
+  margin-left: 10px;
+}

@@ -29,7 +29,8 @@ func (api *API) AuthHandler(w http.ResponseWriter, r *http.Request) {
 			Name:  "lang",
 			Value: university.Lang,
 		})
-		err = json.NewEncoder(w).Encode(university.ID)
+		university.Password = ""
+		err = json.NewEncoder(w).Encode(university)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}

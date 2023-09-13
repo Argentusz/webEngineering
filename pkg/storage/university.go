@@ -17,7 +17,7 @@ func (s *Storage) GetUniversityByLogin(login string) (models.University, error) 
 	var university models.University
 	err := s.pool.QueryRow(context.Background(),
 		`SELECT id, name, login, password, lang FROM universities WHERE login = $1`, login).
-		Scan(&university.ID, university.Name, university.Login, university.Password, university.Lang)
+		Scan(&university.ID, &university.Name, &university.Login, &university.Password, &university.Lang)
 	return university, err
 }
 
@@ -36,4 +36,11 @@ func (s *Storage) NewUniversity(university models.University) (int, error) {
 		`INSERT INTO universities(name, login, password) VALUES ($1, $2, $3) RETURNING id`,
 		university.Name, university.Login, string(hashedPassword)).Scan(&id)
 	return id, err
+}
+
+func (s *Storage) PatchUniversity(university models.University) error {
+	_, err := s.pool.Query(context.Background(),
+		`UPDATE universities SET name = $2, login = $3, password = $4, lang = $5 WHERE id = $1`,
+		university.ID, university.Name, university.Login, university.Password, university.Lang)
+	return err
 }

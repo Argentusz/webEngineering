@@ -21,12 +21,12 @@ func (api *API) FacultiesHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		faculty, err := api.db.GetFacultyByUID(uid)
+		faculties, err := api.db.GetFacultiesByUID(uid)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		err = json.NewEncoder(w).Encode(faculty)
+		err = json.NewEncoder(w).Encode(faculties)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -42,9 +42,9 @@ func (api *API) FacultiesHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Faculty not safe", http.StatusBadRequest)
 			return
 		}
-		_, err = api.db.GetUniversity(faculty.UniversityID)
-		if err != nil {
-			http.Error(w, "No university found", http.StatusBadRequest)
+		_, err = api.db.GetFacultiyByExam(faculty.ExamDate, faculty.ExamAud)
+		if err == nil {
+			http.Error(w, "Faculty with given exam info already exists", http.StatusBadRequest)
 			return
 		}
 		id, err := api.db.PostFaculty(faculty)

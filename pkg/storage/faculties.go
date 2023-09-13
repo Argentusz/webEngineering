@@ -5,10 +5,31 @@ import (
 	"webEngineering/pkg/models"
 )
 
-func (s *Storage) GetFacultyByUID(uid int) (models.Faculty, error) {
+func (s *Storage) GetFacultiesByUID(uid int) ([]models.Faculty, error) {
+	var faculties []models.Faculty
+	rows, err := s.pool.Query(context.Background(),
+		`SELECT id, universityID, name, exam_date, exam_aud FROM faculties WHERE universityID = $1`, uid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var faculty models.Faculty
+		err = rows.Scan(&faculty.ID, &faculty.UniversityID, &faculty.Name, &faculty.ExamDate, &faculty.ExamAud)
+		if err != nil {
+			return nil, err
+		}
+		faculties = append(faculties, faculty)
+	}
+
+	return faculties, err
+}
+
+func (s *Storage) GetFacultiyByExam(examDate, examAud string) (models.Faculty, error) {
 	var faculty models.Faculty
 	err := s.pool.QueryRow(context.Background(),
-		`SELECT id, universityID, name, exam_date, exam_aud FROM faculties WHERE universityID = $1`, uid).
+		`SELECT id, universityID, name, exam_date, exam_aud FROM faculties WHERE exam_date = $1 AND exam_aud = $2`, examDate, examAud).
 		Scan(&faculty.ID, &faculty.UniversityID, &faculty.Name, &faculty.ExamDate, &faculty.ExamAud)
 	return faculty, err
 }
@@ -16,7 +37,8 @@ func (s *Storage) GetFacultyByUID(uid int) (models.Faculty, error) {
 func (s *Storage) PostFaculty(faculty models.Faculty) (int, error) {
 	var id int
 	err := s.pool.QueryRow(context.Background(),
-		`INSERT INTO faculties(universityID, name, exam_date, exam_aud) VALUES ($1, $2, $3, $4) RETURNING id`).
+		`INSERT INTO faculties(universityID, name, exam_date, exam_aud) VALUES ($1, $2, $3, $4) RETURNING id`,
+		faculty.UniversityID, faculty.Name, faculty.ExamDate, faculty.ExamAud).
 		Scan(&id)
 	return id, err
 }

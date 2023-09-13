@@ -19,6 +19,7 @@ type Server struct {
 	address     string
 	certificate string
 	key         string
+	frontend    string
 }
 
 func New(cfg config.Config) (*API, error) {
@@ -41,17 +42,19 @@ func New(cfg config.Config) (*API, error) {
 			address:     fmt.Sprintf("%s:%s", cfg.Host, cfg.Port),
 			certificate: cfg.CertFile,
 			key:         cfg.KeyFile,
+			frontend:    cfg.FrontEnd,
 		},
 	}, nil
 }
 
 func (api *API) Fill() {
 	api.router.Use(api.Middleware)
-	api.router.HandleFunc("/ping", api.PingHandler).Methods(http.MethodGet)
-	api.router.HandleFunc("/auth", api.AuthHandler).Methods(http.MethodGet, http.MethodPost)
-	api.router.HandleFunc("/api/students", api.StudentsHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete)
-	api.router.HandleFunc("/api/faculties", api.FacultiesHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete)
-	api.router.HandleFunc("/api/faculties_to_students", api.FacultiesToStudents).Methods(http.MethodGet, http.MethodPost, http.MethodDelete)
+	api.router.HandleFunc("/ping", api.PingHandler).Methods(http.MethodGet, http.MethodOptions)
+	api.router.HandleFunc("/auth", api.AuthHandler).Methods(http.MethodGet, http.MethodPost, http.MethodOptions)
+	api.router.HandleFunc("/api/universities", api.UniversitiesHandler).Methods(http.MethodPatch, http.MethodOptions)
+	api.router.HandleFunc("/api/students", api.StudentsHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete, http.MethodOptions)
+	api.router.HandleFunc("/api/faculties", api.FacultiesHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete, http.MethodOptions)
+	api.router.HandleFunc("/api/faculties_to_students", api.FacultiesToStudents).Methods(http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodOptions)
 	api.router.HandleFunc("/api/test", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
@@ -63,6 +66,7 @@ func (api *API) Fill() {
 			}
 		}
 	}).Methods(http.MethodGet)
+	api.router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("/Users/mt/webEngineering/test/dist"))))
 }
 
 func (api *API) Serve() error {

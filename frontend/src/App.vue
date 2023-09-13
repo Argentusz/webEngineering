@@ -10,7 +10,7 @@
 import MtHeader from "@/components/mtHeader.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {MtHeader},
 }
 </script>
@@ -25,6 +25,6 @@ export default {
   color: white;
 }
 .routerView {
-  max-height: calc(100vh - $mtHeaderHeight);
+  height: calc(100vh - $mtHeaderHeight);
 }
 </style>

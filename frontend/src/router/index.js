@@ -1,16 +1,21 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue"
+import VueRouter from "vue-router"
 import SignIn from "@/views/SignIn.vue";
+import FacultiesGridView from "@/views/facultiesGridView.vue";
 Vue.use(VueRouter)
 const routes = [
     {
-        path: '/sign-in',
+        path: "/sign-in",
         component: SignIn
     },
+    {
+        path: "/",
+        component: FacultiesGridView
+    }
 ]
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: "history",
     routes
 })
 

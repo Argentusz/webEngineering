@@ -3,13 +3,13 @@ package helpers
 import "webEngineering/pkg/models"
 
 func CheckFacultySafety(faculty models.Faculty) bool {
-	if !checkForSpecialSymbols(faculty.Name, true) {
+	if faculty.Name == "" || !checkForSpecialSymbols(faculty.Name, true) {
 		return false
 	}
-	if !checkForSpecialSymbols(faculty.ExamDate, true) {
+	if faculty.ExamDate == "" || !checkForSpecialSymbols(faculty.ExamDate, true) {
 		return false
 	}
-	if !checkForSpecialSymbols(faculty.ExamAud, true) {
+	if faculty.ExamAud == "" || !checkForSpecialSymbols(faculty.ExamAud, true) {
 		return false
 	}
 	return true
