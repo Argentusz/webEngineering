@@ -113,7 +113,7 @@ export default {
               ExamAud: ""
             }
           })
-          .catch(err => console.log(err))
+          .catch(err => this.$error(err.response.data))
     },
     patch() {
       this.$http.patch(url + "/api/faculties", this.faculty, this.addBasicAuth({}))
@@ -127,7 +127,7 @@ export default {
               ExamAud: ""
             }
           })
-          .catch(err => console.log(err))
+          .catch(err => this.$error(err.response.data))
     }
   }
 }

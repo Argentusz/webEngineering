@@ -1,0 +1,20 @@
+services:
+  server:
+    build: .
+    ports:
+      - 8081:8081
+    restart: always
+    depends_on:
+      - database
+      - web
+  database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=mt
+      - POSTGRES_PASSWORD=password
+      - PGDATA=/Users/mt/webDBv2
+    ports:
+      - 2229:2229
+  web:
+    build: frontend/

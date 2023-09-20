@@ -1,14 +1,15 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"webEngineering/pkg/server"
 )
 
 func main() {
+	log.Println("Start")
 	err := server.Start()
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 		return
 	}
 }

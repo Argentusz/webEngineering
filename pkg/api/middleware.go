@@ -9,17 +9,15 @@ import (
 
 func (api *API) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodOptions {
+		if strings.Contains(r.URL.Path, "/api") || r.URL.Path == "/auth" || r.URL.Path == "/ping" {
 			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
 			w.Header().Set("Access-Control-Allow-Headers", "*")
 			w.Header().Set("Content-Type", "application/json")
-			return
+			if r.Method == http.MethodOptions {
+				return
+			}
 		}
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "*")
-		w.Header().Set("Content-Type", "application/json")
 
 		if strings.Contains(r.URL.Path, "/api") {
 			// HTTP Authorization

@@ -5,13 +5,13 @@ import (
 )
 
 func CheckUniversitySafety(university models.University) bool {
-	if len(university.Login) > 32 || !checkForSpecialSymbols(university.Login, false) {
+	if len(university.Login) > 32 || !checkForSpecialSymbols(university.Login, false) || university.Login == "" {
 		return false
 	}
 	if len(university.Password) < 5 || len(university.Password) > 32 {
 		return false
 	}
-	if !checkForSpecialSymbols(university.Name, true) {
+	if !checkForSpecialSymbols(university.Name, true) || university.Name == "" {
 		return false
 	}
 	return true

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <mt-header/>
+    <mt-header v-model="username"/>
     <router-view class="routerView"/>
   </div>
 </template>

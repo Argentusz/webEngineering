@@ -1,10 +1,12 @@
 package api
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
+	"os"
+	"time"
 	"webEngineering/pkg/config"
 	"webEngineering/pkg/storage"
 )
@@ -48,6 +50,21 @@ func New(cfg config.Config) (*API, error) {
 }
 
 func (api *API) Fill() {
+	_, err := os.Stat(api.frontend)
+	for os.IsNotExist(err) {
+		log.Println("Folder", api.frontend, "does not exist.")
+		time.Sleep(2 * time.Second)
+		_, err = os.Stat(api.frontend)
+	}
+	log.Println(api.frontend, "found")
+
+	_, err = os.Stat(api.frontend + "/css")
+	if os.IsNotExist(err) {
+		log.Println("Folder", api.frontend+"/css Doe snot exist")
+	} else {
+		log.Println(api.frontend + "/css Exists")
+	}
+
 	api.router.Use(api.Middleware)
 	api.router.HandleFunc("/ping", api.PingHandler).Methods(http.MethodGet, http.MethodOptions)
 	api.router.HandleFunc("/auth", api.AuthHandler).Methods(http.MethodGet, http.MethodPost, http.MethodOptions)
@@ -55,18 +72,19 @@ func (api *API) Fill() {
 	api.router.HandleFunc("/api/students", api.StudentsHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete, http.MethodOptions)
 	api.router.HandleFunc("/api/faculties", api.FacultiesHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete, http.MethodOptions)
 	api.router.HandleFunc("/api/faculties_to_students", api.FacultiesToStudents).Methods(http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodOptions)
-	api.router.HandleFunc("/api/test", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case http.MethodGet:
-			idString := r.URL.Query().Get("id")
-			err := json.NewEncoder(w).Encode(idString)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-		}
-	}).Methods(http.MethodGet)
-	api.router.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("/Users/mt/webEngineering/test/dist"))))
+	// Serve static assets directly.
+	api.router.PathPrefix("/css").Handler(http.FileServer(http.Dir(api.frontend)))
+	api.router.PathPrefix("/js").Handler(http.FileServer(http.Dir(api.frontend)))
+	api.router.PathPrefix("/img").Handler(http.FileServer(http.Dir(api.frontend)))
+	// Catch-all: Serve our JavaScript application's entry-point (index.html).
+	api.router.PathPrefix("/").HandlerFunc(IndexHandler(api.frontend + "/index.html"))
+}
+
+func IndexHandler(entrypoint string) func(w http.ResponseWriter, r *http.Request) {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, entrypoint)
+	}
+	return http.HandlerFunc(fn)
 }
 
 func (api *API) Serve() error {

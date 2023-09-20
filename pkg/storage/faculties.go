@@ -26,10 +26,10 @@ func (s *Storage) GetFacultiesByUID(uid int) ([]models.Faculty, error) {
 	return faculties, err
 }
 
-func (s *Storage) GetFacultiyByExam(examDate, examAud string) (models.Faculty, error) {
+func (s *Storage) GetFacultiyByExam(examDate, examAud string, uid int) (models.Faculty, error) {
 	var faculty models.Faculty
 	err := s.pool.QueryRow(context.Background(),
-		`SELECT id, universityID, name, exam_date, exam_aud FROM faculties WHERE exam_date = $1 AND exam_aud = $2`, examDate, examAud).
+		`SELECT id, universityID, name, exam_date, exam_aud FROM faculties WHERE exam_date = $1 AND exam_aud = $2 AND universityID = $3`, examDate, examAud, uid).
 		Scan(&faculty.ID, &faculty.UniversityID, &faculty.Name, &faculty.ExamDate, &faculty.ExamAud)
 	return faculty, err
 }

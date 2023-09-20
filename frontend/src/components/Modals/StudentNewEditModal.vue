@@ -16,7 +16,7 @@
     <template #modal-footer>
       <b-button
           class="text-sm"
-          @click="$bvModal.hide('faculty-new-edit-modal'); $emit('hide')"
+          @click="$bvModal.hide('student-new-edit-modal'); $emit('hide')"
       >
         {{ $t('cancel') }}
       </b-button>
@@ -100,7 +100,7 @@ export default {
               Exam: ""
             }
           })
-          .catch(err => console.log(err))
+          .catch(err => this.$error(err.response.data))
     },
     patch() {
       this.$http.patch(url + "/api/students", this.student, this.addBasicAuth({}))
@@ -113,7 +113,7 @@ export default {
               Exam: ""
             }
           })
-          .catch(err => console.log(err))
+          .catch(err => this.$error(err.response.data))
     }
   }
 }

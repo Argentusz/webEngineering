@@ -6,6 +6,7 @@ Vue.use(VueI18n)
 const msg = {
     ru: {
         signIn: "Войти",
+        signUp: "Зарегистрироваться",
         login: "Логин",
         password: "Пароль",
         name: "Имя",
@@ -31,10 +32,15 @@ const msg = {
         changeStudent: "Изменить студента",
         newFaculty: "Новый факультет",
         changeFaculty: "Изменить факультет",
-        settings: "Настройки"
+        settings: "Настройки",
+        noAcc: "Нет аккаунта",
+        yesAcc: "Есть аккаунт",
+        error: "Ошибка",
+        errWrongLoginPassword: "Неверный логин или пароль"
     },
     en: {
         signIn: "Sign In",
+        signUp: "Sign Up",
         login: "Login",
         password: "Password",
         name: "Name",
@@ -60,7 +66,11 @@ const msg = {
         changeStudent: "Change student",
         newFaculty: "New faculty",
         changeFaculty: "Change faculty",
-        settings: "Settings"
+        settings: "Settings",
+        noAcc: "Don`t have account",
+        yesAcc: "Already have account",
+        error: "Error",
+        errWrongLoginPassword: "Wrong login or password"
     }
 }
 

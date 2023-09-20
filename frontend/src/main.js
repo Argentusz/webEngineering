@@ -12,15 +12,28 @@ import "ag-grid-community/styles/ag-theme-balham.css";
 import "@/helpers/styles.scss"
 import "@/helpers/variables.scss"
 
+Vue.config.productionTip = true
+
 Vue.component("ag-grid-vue", AgGridVue)
 Vue.use(BootstrapVue);
 
-Vue.prototype.$baseUrl = "https://localhost:8081"
 Vue.use(http, {
   baseUrl: "https://localhost:8081"
 })
+Vue.prototype.$baseUrl = "https://localhost:8081"
 Vue.mixin({
+  data() {
+    return {
+      username: null,
+    }
+  },
+  created() {
+    this.username = localStorage.getItem("name")
+  },
   methods: {
+    setUsername(username) {
+      this.username = username
+    },
     checkLoggedIn() {
       return localStorage.getItem("login") && localStorage.getItem("password") &&
           localStorage.getItem("uid") && localStorage.getItem("name")
@@ -38,6 +51,14 @@ Vue.mixin({
     },
     $log(...opts) {
       console.log(...opts)
+    },
+    $error(error, title = this.$t("error")) {
+      this.$bvToast.toast(error, {
+        title: title,
+        variant: "danger",
+        solid: true,
+        toaster: "b-toaster-bottom-right"
+      })
     }
   }
 })

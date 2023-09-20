@@ -19,6 +19,9 @@
         >
           {{ $t('signIn') }}
         </b-button>
+        <div style="margin-top: 10px">
+          {{ $t('noAcc') }}?<br/><a href="sign-up">{{$t('signUp')}}</a>
+        </div>
       </div>
   </div>
 
@@ -51,11 +54,10 @@ export default {
             localStorage.setItem("login", r.data.Login)
             localStorage.setItem("password", this.user.Password)
             localStorage.setItem("name", r.data.Name)
-            this.$router.push("/").catch(() => {})
+            this.setUsername(r.data.Name)
+            this.$router.go(0)
           })
-          .catch(err => {
-            console.log(err)
-          })
+          .catch(() => this.$error(this.$t("errWrongLoginPassword")))
     }
   }
 }

@@ -159,7 +159,7 @@ export default {
             this.selectedFID = null
             this.getData()
           })
-          .catch(err => console.log(err))
+          .catch(err => this.$error(err.response.data))
 
     },
     clickMoreHandler() {
@@ -190,7 +190,7 @@ export default {
           .then(() => {
             this.sidebarRefreshHandler()
           })
-          .catch(err => console.log(err))
+          .catch(err => this.$error(err.response.data))
     },
     kickHandler(student) {
       if (!student?.ID || !this.selectedFID) {
@@ -200,9 +200,7 @@ export default {
           .then(() => {
             this.sidebarRefreshHandler()
           })
-          .catch(err => {
-            console.log(err)
-          })
+          .catch(err => this.$error(err.response.data))
     },
     inviteHandler(student) {
       if (!student?.ID || !this.selectedFID) {
@@ -226,11 +224,9 @@ export default {
     getData() {
       this.$http.get(url + "/api/faculties", this.addBasicAuth({params: {uid: this.uid}}))
           .then(r => {
-            this.faculties = r.data
+            this.faculties = r.data || []
           })
-          .catch(err => {
-            console.log(err)
-          })
+          .catch(err => this.$error(err.response.data))
     },
     getStudentsByFID() {
       if (!this.selectedFID) {
@@ -242,7 +238,7 @@ export default {
           .then(r => {
             this.facultyStudents = r.data || []
           })
-          .catch(err => console.log(err))
+          .catch(err => this.$error(err.response.data))
     },
     getOtherStudents() {
       this.otherStudents = null
@@ -251,7 +247,7 @@ export default {
             const facultyStudentsIDs = (this.facultyStudents || []).map(el => el.ID) || []
             this.otherStudents = r.data.filter(el => !facultyStudentsIDs.includes(el.ID))
           })
-          .catch(err => console.log(err))
+          .catch(err => this.$error(err.response.data))
     },
     async sidebarRefreshHandler() {
       await this.getStudentsByFID()

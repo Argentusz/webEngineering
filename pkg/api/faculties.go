@@ -42,7 +42,7 @@ func (api *API) FacultiesHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Faculty not safe", http.StatusBadRequest)
 			return
 		}
-		_, err = api.db.GetFacultiyByExam(faculty.ExamDate, faculty.ExamAud)
+		_, err = api.db.GetFacultiyByExam(faculty.ExamDate, faculty.ExamAud, faculty.UniversityID)
 		if err == nil {
 			http.Error(w, "Faculty with given exam info already exists", http.StatusBadRequest)
 			return

@@ -1,8 +1,8 @@
 <template>
 <div class="header">
   <div class="header__btns">
-    <b-button v-if="loggedIn" variant="warning" class="text-sm">
-      <button-icon-text breakPoint="short" :text="name" icon="user-settings"/>
+    <b-button v-if="value" variant="warning" class="text-sm">
+      <button-icon-text breakPoint="short" :text="value" icon="user-settings"/>
     </b-button>
     <b-dropdown variant="warning" style="height: 32px" right no-caret>
       <template #button-content>
@@ -12,7 +12,7 @@
       <b-dropdown-item @click="changeLangHandler('en')">English 🇬🇧</b-dropdown-item>
     </b-dropdown>
     <b-button
-        v-if="loggedIn"
+        v-if="value"
         variant="danger"
         style="height: 32px"
         class="text-sm"
@@ -21,8 +21,8 @@
       {{ $t('exit') }}
     </b-button>
   </div>
-  <div v-if="loggedIn" style="align-self: center" class="header__btns">
-    <b>{{ $t('controlsTitle') }} {{ name }}</b>
+  <div v-if="value" style="align-self: center" class="header__btns">
+    <b>{{ $t('controlsTitle') }} {{ value }}</b>
   </div>
 </div>
 </template>
@@ -33,21 +33,15 @@ import ButtonIconText from "@/components/ButtonIconText.vue";
 export default {
   name: "mtHeader",
   components: {ButtonIconText},
-  data() {
-    return {
-      name: ""
-    }
-  },
-  created() {
-    this.name = localStorage.getItem("name")
-  },
-  computed: {
-    loggedIn() {
-      return this.checkLoggedIn()
+  props: {
+    value: {
+      type: [String, null],
+      default: null
     }
   },
   methods: {
     exitHandler() {
+      this.$emit("input", null)
       localStorage.clear()
       this.$router.push("/sign-in").catch(() => {})
     },
