@@ -58,12 +58,7 @@ func (api *API) Fill() {
 	}
 	log.Println(api.frontend, "found")
 
-	_, err = os.Stat(api.frontend + "/css")
-	if os.IsNotExist(err) {
-		log.Println("Folder", api.frontend+"/css Doe snot exist")
-	} else {
-		log.Println(api.frontend + "/css Exists")
-	}
+	api.db.SetupDB()
 
 	api.router.Use(api.Middleware)
 	api.router.HandleFunc("/ping", api.PingHandler).Methods(http.MethodGet, http.MethodOptions)
