@@ -54,6 +54,8 @@ export default {
             localStorage.setItem("login", r.data.Login)
             localStorage.setItem("password", this.user.Password)
             localStorage.setItem("name", r.data.Name)
+            this.$cookies.set("lang", r.data.Lang)
+            this.$i18n.locale = r.data.Lang
             this.setUsername(r.data.Name)
             this.$router.go(0)
           })

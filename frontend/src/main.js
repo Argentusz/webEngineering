@@ -4,6 +4,7 @@ import http from "@/plugins/http"
 import router from "./router"
 import {i18n} from "./plugins/i18n"
 import { BootstrapVue } from "bootstrap-vue"
+import VueCookies from "vue-cookies"
 import "bootstrap/dist/css/bootstrap.css"
 import "bootstrap-vue/dist/bootstrap-vue.css"
 import { AgGridVue } from "ag-grid-vue"
@@ -13,7 +14,7 @@ import "@/helpers/styles.scss"
 import "@/helpers/variables.scss"
 
 Vue.config.productionTip = true
-
+Vue.use(VueCookies);
 Vue.component("ag-grid-vue", AgGridVue)
 Vue.use(BootstrapVue);
 

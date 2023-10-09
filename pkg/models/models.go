@@ -26,3 +26,8 @@ type FacultyToStudent struct {
 	Fid int
 	Sid int
 }
+
+type Settings struct {
+	Uid  int
+	Lang string
+}

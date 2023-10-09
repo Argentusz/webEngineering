@@ -29,6 +29,7 @@
 
 <script>
 import ButtonIconText from "@/components/ButtonIconText.vue";
+import {url} from "@/main";
 
 export default {
   name: "mtHeader",
@@ -47,7 +48,14 @@ export default {
     },
     changeLangHandler(lang) {
       this.$i18n.locale = lang
-      localStorage.setItem("lang", lang)
+      this.$cookies.set("lang", lang)
+      const uid = localStorage.getItem("uid")
+      if (!uid) {
+        return
+      }
+      this.$http.patch(url + "/api/settings", {Uid: +uid, Lang: lang}, this.addBasicAuth({}))
+          .then(() => {})
+          .catch(err => this.$error(err.response.data))
     }
   }
 }

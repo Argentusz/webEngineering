@@ -67,11 +67,13 @@ func (api *API) Fill() {
 	api.router.HandleFunc("/api/students", api.StudentsHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete, http.MethodOptions)
 	api.router.HandleFunc("/api/faculties", api.FacultiesHandler).Methods(http.MethodGet, http.MethodPost, http.MethodPatch, http.MethodDelete, http.MethodOptions)
 	api.router.HandleFunc("/api/faculties_to_students", api.FacultiesToStudents).Methods(http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodOptions)
+	api.router.HandleFunc("/api/settings", api.SettingsHandler).Methods(http.MethodPatch, http.MethodOptions)
 	// Serve static assets directly.
 	api.router.PathPrefix("/css").Handler(http.FileServer(http.Dir(api.frontend)))
 	api.router.PathPrefix("/js").Handler(http.FileServer(http.Dir(api.frontend)))
 	api.router.PathPrefix("/img").Handler(http.FileServer(http.Dir(api.frontend)))
 	// Catch-all: Serve our JavaScript application's entry-point (index.html).
+	api.router.PathPrefix("/favicon.ico").HandlerFunc(IndexHandler(api.frontend + "/favicon.ico"))
 	api.router.PathPrefix("/").HandlerFunc(IndexHandler(api.frontend + "/index.html"))
 }
 

@@ -79,6 +79,7 @@ import RightBar from "@/components/RightBar.vue";
 import ButtonIconText from "@/components/ButtonIconText.vue";
 import FacultyNewEditModal from "@/components/Modals/FacultyNewEditModal.vue";
 import StudentNewEditModal from "@/components/Modals/StudentNewEditModal.vue";
+
 export default {
   name: "FacultiesGridView",
   components: {StudentNewEditModal, FacultyNewEditModal, ButtonIconText, RightBar, LeftBar, ControlsBar},
@@ -104,6 +105,7 @@ export default {
       this.$router.push("/sign-in").catch(() => {})
     }
     this.uid = localStorage.getItem("uid")
+    this.$i18n.locale = this.$cookies.get("lang")
     this.vw = window.innerWidth;
     window.addEventListener("resize", this.resizeHandler);
     this.getData()
@@ -151,16 +153,23 @@ export default {
       this.$bvModal.show("faculty-new-edit-modal")
     },
     deleteHandler() {
+      const lang = this.$cookies.get("lang")
+      const uid = localStorage.getItem("uid")
+
       this.$http.delete(url + "/api/faculties", this.addBasicAuth({
         data: this.selectedFaculty
       }))
           .then(() => {
+            console.log("faculties")
             this.selectedFaculty = null
             this.selectedFID = null
             this.getData()
           })
           .catch(err => this.$error(err.response.data))
 
+      this.$http.patch(url + "/api/settings", {Uid: +uid, Lang: lang}, this.addBasicAuth({}))
+          .then(() => {console.log("settings")})
+          .catch(err => this.$error(err.response.data))
     },
     clickMoreHandler() {
       if (!this.showRightBar) {

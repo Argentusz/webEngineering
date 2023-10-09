@@ -1,8 +1,8 @@
 package api
 
 import (
-	"fmt"
 	"golang.org/x/crypto/bcrypt"
+	"log"
 	"net/http"
 	"strings"
 )
@@ -23,13 +23,13 @@ func (api *API) Middleware(next http.Handler) http.Handler {
 			// HTTP Authorization
 			login, password, ok := r.BasicAuth()
 			if !ok {
-				fmt.Println("Middleware error: could not parse auth token")
+				log.Println("Middleware error: could not parse auth token")
 				unauthorized(w)
 				return
 			}
 			dbPassword, err := api.db.GetPassword(login)
 			if err != nil || !comparePasswords(password, dbPassword) {
-				fmt.Printf("error while identification: dbPassword=\"%s\", login=\"%s\" password=\"%s\"",
+				log.Printf("error while identification: dbPassword=\"%s\", login=\"%s\" password=\"%s\"",
 					dbPassword, login, password)
 				unauthorized(w)
 				return

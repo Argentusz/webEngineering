@@ -2,25 +2,22 @@ package api
 
 import (
 	"encoding/json"
-	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 	"webEngineering/pkg/models"
 )
 
-func (api *API) UniversitiesHandler(w http.ResponseWriter, r *http.Request) {
+func (api *API) SettingsHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPatch:
-		var university models.University
-		err := json.NewDecoder(r.Body).Decode(&university)
+		var settings models.Settings
+		err := json.NewDecoder(r.Body).Decode(&settings)
 		if err != nil {
 			log.Println(err.Error())
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(university.Password), 10)
-		university.Password = string(hashedPassword)
-		err = api.db.PatchUniversity(university)
+		err = api.db.PatchSettings(settings)
 		if err != nil {
 			log.Println(err.Error())
 			http.Error(w, err.Error(), http.StatusInternalServerError)

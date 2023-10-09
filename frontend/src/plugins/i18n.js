@@ -73,13 +73,8 @@ const msg = {
         errWrongLoginPassword: "Wrong login or password"
     }
 }
-
-let lcl = localStorage.getItem("lang")
-if (lcl === null) {
-    lcl = "ru"
-}
 export const i18n = new VueI18n({
-    locale: lcl,
+    locale: "ru",
     fallbackLocale: "ru",
     messages: msg
 })

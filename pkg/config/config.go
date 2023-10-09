@@ -24,6 +24,7 @@ func (cfg *Config) Setup() {
 	//cfg.CertFile = "localhost.crt"
 	//cfg.KeyFile = "localhost.key"
 	//cfg.FrontEnd = "frontend/dist"
+
 	cfg.Host = "server"
 	cfg.Port = "8081"
 	cfg.DbName = "postgres"
